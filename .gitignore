@@ -1,5 +1,6 @@
 
 *.pyc
 node_modules/
-# src/db.sqlite3
+css/
+src/db.sqlite3
 # src/frontend/static/
