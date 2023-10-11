@@ -44,7 +44,7 @@ export default function ResortDetails(){
         <table>
           <tbody>
             <tr>
-              <th>Date</th>
+              <th>Date (test date)</th>
               <th>Price</th>
             </tr>
             {resortPrices.map((item) => 
