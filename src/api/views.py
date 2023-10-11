@@ -51,6 +51,8 @@ class GetResortPrices(APIView):
           datesCovered.add(price.date.strftime("%d/%m/%y"))
           selectedPrices.append(price)
 
+      selectedPrices.sort(key=lambda x:x.date)
+
       return Response(PriceDataPointSerializer(selectedPrices, many=True).data)
     except Exception as e:
       print(e)
