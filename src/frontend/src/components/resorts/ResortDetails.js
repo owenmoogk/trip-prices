@@ -27,9 +27,9 @@ export default function ResortDetails(){
   }, [])
 
   return (
-    <>
+    <div id="resortDetails">
       {resortData ?
-        <h1>{resortData.name}</h1>
+        <h1>{resortData.name.trim()}</h1>
       : null}
     
       {resortPrices ?
@@ -58,6 +58,6 @@ export default function ResortDetails(){
       </>
       : null}
 
-    </>
+    </div>
   );
 }
