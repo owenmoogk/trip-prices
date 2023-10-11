@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router';
+import { getCookie } from "../CSRF"
 
 export default function LoginForm(props) {
 
@@ -13,7 +14,8 @@ export default function LoginForm(props) {
 		fetch('/token-auth/', {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				'X-CSRFToken': getCookie('csrftoken'),
 			},
 			body: JSON.stringify({ username: username, password: password })
 		})
