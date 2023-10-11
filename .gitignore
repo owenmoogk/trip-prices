@@ -3,4 +3,5 @@
 node_modules/
 css/
 src/db.sqlite3
+migrations/
 # src/frontend/static/
