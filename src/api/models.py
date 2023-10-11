@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -9,3 +10,7 @@ class PriceDataPoint(models.Model):
   resort = models.ForeignKey(Resort, on_delete=models.CASCADE)
   price = models.FloatField()
   date = models.DateField()
+
+class ResortUserLike(models.Model):
+  resort = models.ForeignKey(Resort, on_delete=models.CASCADE)
+  user = models.ForeignKey(User, on_delete=models.CASCADE)

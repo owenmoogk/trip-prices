@@ -7,6 +7,11 @@ class ResortSerializer(serializers.Serializer):
 	id = serializers.IntegerField()
 	name = serializers.CharField(max_length = 255)
 
+class ResortLikedSerializer(serializers.Serializer):
+	id = serializers.IntegerField()
+	name = serializers.CharField(max_length = 255)
+	liked = serializers.BooleanField()
+
 class PriceDataPointSerializer(serializers.Serializer):
 	resort = ResortSerializer()
 	price = serializers.FloatField()

@@ -3,3 +3,4 @@ from .models import *
 
 admin.site.register(Resort)
 admin.site.register(PriceDataPoint)
+admin.site.register(ResortUserLike)
