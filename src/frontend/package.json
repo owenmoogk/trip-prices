@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack --mode development --watch",
+    "dev": "concurrently --kill-others \"less-watch-compiler src/less src/css\" \"webpack --mode development --watch\"",
     "build": "webpack --mode production"
   },
   "keywords": [],
@@ -30,6 +30,7 @@
     "@material-ui/icons": "^4.11.3",
     "@material-ui/lab": "^4.0.0-alpha.61",
     "babel-plugin-recharts": "^2.0.0",
+    "concurrently": "^8.2.1",
     "prop-types": "^15.8.1",
     "recharts": "^2.8.0"
   }
