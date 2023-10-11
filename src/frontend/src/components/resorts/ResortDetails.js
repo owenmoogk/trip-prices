@@ -34,6 +34,13 @@ export default function ResortDetails(){
     
       {resortPrices ?
       <>
+        <LineChart width={400} height={400} data={resortPrices}>
+          <Line type="monotone" dataKey="price" stroke="#8884d8" />
+          <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+          <XAxis dataKey="date" />
+          <YAxis />
+          <Tooltip />
+        </LineChart>
         <table>
           <tbody>
             <tr>
@@ -48,14 +55,6 @@ export default function ResortDetails(){
             )}
           </tbody>
         </table>
-        {console.log(resortPrices)}
-        <LineChart width={400} height={400} data={resortPrices}>
-          <Line type="monotone" dataKey="price" stroke="#8884d8" />
-          <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-          <XAxis dataKey="date" />
-          <YAxis />
-          <Tooltip />
-        </LineChart>
       </>
       : null}
 
