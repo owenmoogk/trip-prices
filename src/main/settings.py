@@ -12,6 +12,16 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 
+import django
+from django.utils.encoding import smart_str
+django.utils.encoding.smart_text = smart_str
+
+import django
+from django.utils.translation import gettext
+django.utils.translation.ugettext = gettext
+
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,7 +35,7 @@ SECRET_KEY = 'django-insecure-ekxh^z_yu2_a7grc64w!=hudp=odt-2q8niqt026*fdyi)s68n
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["10.0.0.104"]
 
 
 # Application definition
@@ -137,7 +147,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
