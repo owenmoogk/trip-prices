@@ -49,7 +49,7 @@ browser = webdriver.Edge(
 )
 
 # scrape the website
-url = "https://www.tripcentral.ca/vacationgrid/index.php?params=0,143,19942,0,2,1,3,202401,0,11101,0,0,0,0,2,1,0,0-0-0,0,0,100,0,0,0,0,0,0,0,1,1,0,0&numberOfAdults=2&numberOfRooms=1"
+url = "https://www.tripcentral.ca/vacationgrid/index.php?params=0,143,19942,0,2,1,2,202401,0,11101,0,0,0,0,2,1,0,0-0-0,0,0,100,0,0,0,0,0,0,0,1,1,0,0&numberOfAdults=2&numberOfRooms=1"
 browser.get(url)
 html = browser.page_source
 soup = BeautifulSoup(html, 'html.parser')
