@@ -15,4 +15,6 @@ class ResortLikedSerializer(serializers.Serializer):
 class PriceDataPointSerializer(serializers.Serializer):
 	resort = ResortSerializer()
 	price = serializers.FloatField()
-	date = serializers.DateField()
+	dateCollected = serializers.DateField()
+	tripStartDate = serializers.DateField()
+	tripEndDate = serializers.DateField()

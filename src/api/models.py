@@ -9,7 +9,9 @@ class Resort(models.Model):
 class PriceDataPoint(models.Model):
   resort = models.ForeignKey(Resort, on_delete=models.CASCADE)
   price = models.FloatField()
-  date = models.DateField()
+  dateCollected = models.DateField()
+  tripStartDate = models.DateField()
+  tripEndDate = models.DateField()
 
 class ResortUserLike(models.Model):
   resort = models.ForeignKey(Resort, on_delete=models.CASCADE)
