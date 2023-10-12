@@ -1,11 +1,10 @@
-from django.shortcuts import render
 from rest_framework import permissions, status
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import *
 from .serializers import *
-from django.db.models import F, Q, Count, Exists, OuterRef
+from django.db.models import Exists, OuterRef
+from datetime import datetime
 
 class GetResorts(APIView):
   
@@ -39,7 +38,7 @@ class GetResortPrices(APIView):
   def get(self, request, id):
 
     try:
-      return Response(PriceDataPointSerializer(getResortPrices(id), many=True).data)
+      return Response(getResortPrices(id))
     except Exception as e:
       print(e)
       return Response(status=status.HTTP_404_NOT_FOUND)
@@ -71,24 +70,57 @@ class FavoriteResortData(APIView):
 
     resortPrices = {}
     for resort in likedResorts:
-      resortPrices[resort.id] = PriceDataPointSerializer(getResortPrices(resort.id), many=True).data
+      resortPrices[resort.name] = getAverageResortPrices(resort.id)
 
     return Response(resortPrices, status=status.HTTP_200_OK)
 
 
 # helper function
+def getAverageResortPrices(id):
+  prices = PriceDataPoint.objects.filter(resort = Resort.objects.get(id = id))
+
+  dateIds = {}
+  for price in prices:
+    if (dateIds.get(price.dateCollected.strftime("%d/%m/%y"))):
+      dateIds[price.dateCollected.strftime("%d/%m/%y")].append(price.id)
+    else:
+      dateIds[price.dateCollected.strftime("%d/%m/%y")] = [price.id]
+
+  resultData = []
+  for date in dateIds.keys():
+    datePrices = []
+    for priceDataPointId in dateIds[date]:
+      datePrices.append(prices.get(id = priceDataPointId).price)
+
+    resultData.append({"dateCollected": datetime.strptime(date, "%d/%m/%y").date(), "price" : round(sum(datePrices) / len(datePrices), 0)})
+
+  return resultData
+
+
 def getResortPrices(id):
   prices = PriceDataPoint.objects.filter(resort = Resort.objects.get(id = id))
       
-  # limit to only one data point per day
-  datesCovered = set()
-  selectedPrices = []
-  for price in prices:
-    if price.date.strftime("%d/%m/%y") in datesCovered:
-      continue
-    else:
-      datesCovered.add(price.date.strftime("%d/%m/%y"))
-      selectedPrices.append(price)
+  tripStartEndDateSet = set()
+  tripStartEndDatePairs = []
+  priceData = {}
 
-  selectedPrices.sort(key=lambda x:x.date)
-  return selectedPrices
+  for price in prices:
+    dateRangeIdentifier = price.tripStartDate.strftime("%d/%m/%y")+price.tripEndDate.strftime("%d/%m/%y")
+    if (dateRangeIdentifier) in tripStartEndDateSet:
+      pass
+    else:
+      tripStartEndDateSet.add(dateRangeIdentifier)
+      tripStartEndDatePairs.append((price.tripStartDate, price.tripEndDate))
+      priceData[dateRangeIdentifier] = []
+    
+    priceData[dateRangeIdentifier].append({"dateCollected": price.dateCollected, "price": price.price})
+
+  resultData = []
+  for tripStartEndDatePair in tripStartEndDatePairs:
+    resultData.append({
+      "startDate": tripStartEndDatePair[0],
+      "endDate": tripStartEndDatePair[1],
+      "prices": priceData[tripStartEndDatePair[0].strftime("%d/%m/%y")+tripStartEndDatePair[1].strftime("%d/%m/%y")]
+    })
+
+  return resultData
