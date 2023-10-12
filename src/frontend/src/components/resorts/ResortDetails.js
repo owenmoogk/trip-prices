@@ -67,10 +67,10 @@ export default function ResortDetails() {
     for (var item of resortPrices){
       for (var pricePoint of item.prices){
         if (pricePoint.price > max){
-          max = item.price
+          max = pricePoint.price
         }
         if (pricePoint.price < min){
-          min = item.price
+          min = pricePoint.price
         }
       }
     }
