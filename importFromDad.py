@@ -21,13 +21,22 @@ def updateResortNames():
   resortIds = [resort[0] for resort in resorts]
   nextResortId = max(resortIds) + 1
 
-def addPrice(resortId, price, dateInput):
+def addPrice(resortId, price, dateRecorded, tripStartDate, tripEndDate):
   while True:
     try:
-      cursor.execute(f"insert into api_pricedatapoint values({randint(0,100000000)}, {price}, \'{dateInput.year}-{dateInput.month}-{dateInput.day}\', {resortId})")
+      cursor.execute(f"""
+                     insert into api_pricedatapoint (id, price, dateCollected, resort_id, tripStartDate, tripEndDate) values(
+                        {randint(0,100000000)}, 
+                        {price}, 
+                        \'{dateRecorded.year}-{dateRecorded.month}-{dateRecorded.day}\', 
+                        {resortId},
+                        \'{tripStartDate.year}-{tripStartDate.month}-{tripStartDate.day}\',
+                        \'{tripEndDate.year}-{tripEndDate.month}-{tripEndDate.day}\'
+                    )""")
       conn.commit()
       return
-    except:
+    except Exception as e:
+      print(e)
       pass
 
 updateResortNames()
@@ -38,18 +47,37 @@ with open('dad.csv', "r") as f:
   for row in reader:
     rows.append(row)
   names = rows[0]
+  startDates = rows[1]
+  endDates = rows[2]
+
   names.remove("")
+  startDates.remove("")
+  endDates.remove("")
+
   rows.remove(names)
+  rows.remove(startDates)
+  rows.remove(endDates)
+
+  for index, name in enumerate(names):
+    try:
+      if name == "" and names[index+1] == "":
+        names[index] = names[index-1]
+      elif name == "":
+        names[index] = names[index+1]
+    except:
+      names[index] = names[index - 1]
 
   for row in rows:
-    currDate = datetime.strptime(row[0], "%d-%b-%y")
+    dateRecorded = datetime.strptime(row[0], "%d-%b-%y")
     row.remove(row[0])
     
     for index, price in enumerate(row):
       if price:
         resortName = names[index]
+        tripStartDate = datetime.strptime(startDates[index], "%d-%b-%y")
+        tripEndDate = datetime.strptime(endDates[index], "%d-%b-%y")
         resortId = resortIds[resortNames.index(resortName)]
-        addPrice(resortId, price, currDate)
+        addPrice(resortId, price, dateRecorded, tripStartDate, tripEndDate)
 
 
 # for row in rows:
