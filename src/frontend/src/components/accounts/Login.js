@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Redirect } from 'react-router';
 import { getCookie } from "../CSRF"
 
 export default function LoginForm(props) {
@@ -7,11 +6,10 @@ export default function LoginForm(props) {
 	const [username, setUsername] = useState()
 	const [password, setPassword] = useState()
 	const [message, setMessage] = useState()
-	const [redirect, setRedirect] = useState()
 
 	function handleLogin(e) {
 		e.preventDefault();
-		fetch('/token-auth/', {
+		fetch('/users/jwt/create/', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -21,11 +19,11 @@ export default function LoginForm(props) {
 		})
 			.then(response => response.json())
 			.then(json => {
-				if (json.token) {
-					localStorage.setItem('token', json.token);
+				if (json.access) {
+					localStorage.setItem('access', json.access);
+					localStorage.setItem('refresh', json.refresh)
 					props.setLoggedIn(true)
-					props.setUsername(json.user.username)
-					setRedirect(true)
+					window.location.href="/"
 				}
 				else{
 					setMessage(json[Object.keys(json)[0]])
@@ -35,10 +33,6 @@ export default function LoginForm(props) {
 
 	return (
 		<>
-			{redirect ?
-				<Redirect to='/' />
-				: null
-			}
 			<form onSubmit={e => handleLogin(e)}>
 				<h4>Log In</h4>
 				<label htmlFor="username">Username</label>

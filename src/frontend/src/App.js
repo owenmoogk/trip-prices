@@ -16,30 +16,34 @@ import "./styles.css"
 export default function App(props) {
 
 	const [username, setUsername] = useState()
-	const [loggedIn, setLoggedIn] = useState(localStorage.getItem('token') ? true : false)
+	const [loggedIn, setLoggedIn] = useState(localStorage.getItem('access') ? true : false)
 
 	function handleLogout() {
-		localStorage.removeItem('token');
-		setLoggedIn(false)
-		setUsername('')
+		localStorage.removeItem('access');
+		localStorage.removeItem("refresh")
+		window.location.href="/"
 	};
+
+	function getCurrentUser() {
+		fetch('/users/current-user/', {
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem('access')}`
+			}
+		})
+			.then(response => response.json())
+			.then(json => {
+				if (json.username) {
+					setUsername(json.username)
+				}
+				else {
+					handleLogout()
+				}
+			});
+	}
 
 	useEffect(() => {
 		if (loggedIn) {
-			fetch('/users/current_user/', {
-				headers: {
-					Authorization: `JWT ${localStorage.getItem('token')}`
-				}
-			})
-				.then(response => response.json())
-				.then(json => {
-					if (json.username) {
-						setUsername(json.username)
-					}
-					else {
-						handleLogout()
-					}
-				});
+			getCurrentUser()
 		}
 	})
 
@@ -54,7 +58,7 @@ export default function App(props) {
 			<div id="body">
 				<Switch>
 					<Route path="/login">
-						<Login setLoggedIn={setLoggedIn} setUsername={setUsername} />
+						<Login setLoggedIn={setLoggedIn} setUsername={setUsername} getCurrentUser={getCurrentUser} />
 					</Route>
 					<Route path="/signup">
 						<Signup setLoggedIn={setLoggedIn} setUsername={setUsername} />

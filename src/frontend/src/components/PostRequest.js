@@ -6,7 +6,7 @@ export default function doPost(url, body){
     body: JSON.stringify(body),
     headers:{
       'X-CSRFToken': getCookie('csrftoken'),
-      'Authorization': `JWT ${localStorage.getItem('token')}`,
+      'Authorization': `Bearer ${localStorage.getItem('access')}`,
       'Content-Type': 'application/json',
     }
   })

@@ -2,12 +2,12 @@ from rest_framework import permissions, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_jwt.settings import api_settings
 from django.contrib.auth.models import User
 
 
 @api_view(['GET'])
 def current_user(request):
+    print(request.user)
     return Response({'username': request.user.username})
 
 
@@ -25,13 +25,6 @@ class Signup(APIView):
         new_user = User(username = request.data['username'])
         new_user.set_password(request.data['password'])
         new_user.save()
-
-        # GETTING TOKEN
-        jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
-        jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
-
-        payload = jwt_payload_handler(new_user)
-        token = jwt_encode_handler(payload)
         
-        return Response({'token': token, 'username': new_user.username})
+        return Response(status=status.HTTP_200_OK)
         

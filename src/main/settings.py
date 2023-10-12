@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 
+from datetime import timedelta
+
 import django
 from django.utils.encoding import smart_str
 django.utils.encoding.smart_text = smart_str
@@ -49,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    "rest_framework_simplejwt",
     'corsheaders',
 
     'users',
@@ -147,9 +150,9 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
 
@@ -157,6 +160,14 @@ CORS_ORIGIN_WHITELIST = (
     'http://127.0.0.1:8000',
 )
 
-JWT_AUTH = {
-    'JWT_RESPONSE_PAYLOAD_HANDLER': 'main.utils.my_jwt_response_handler'
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+    "BLACKLIST_AFTER_ROTATION": False,
+    "UPDATE_LAST_LOGIN": True,
+    "SIGNING_KEY": SECRET_KEY,
+
+    # "Bearer <token>"
+    "AUTH_HEADER_TYPES": ("Bearer",),
+
 }

@@ -5,7 +5,7 @@ export default function doGet(url){
     method: "GET",
     headers:{
       'X-CSRFToken': getCookie('csrftoken'),
-      'Authorization': `JWT ${localStorage.getItem('token')}`,
+      'Authorization': `Bearer ${localStorage.getItem('access')}`,
     }
   })
 }
