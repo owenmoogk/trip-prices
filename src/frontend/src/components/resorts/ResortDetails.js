@@ -63,13 +63,13 @@ export default function ResortDetails() {
 
   var max = -Infinity
   var min = Infinity
-  if (resortPrices){
-    for (var item of resortPrices){
-      for (var pricePoint of item.prices){
-        if (pricePoint.price > max){
+  if (resortPrices) {
+    for (var item of resortPrices) {
+      for (var pricePoint of item.prices) {
+        if (pricePoint.price > max) {
           max = pricePoint.price
         }
-        if (pricePoint.price < min){
+        if (pricePoint.price < min) {
           min = pricePoint.price
         }
       }
@@ -84,38 +84,40 @@ export default function ResortDetails() {
 
       {resortPrices ?
         dateIdMatch ?
-          <>
-            <LineChart width={400} height={400} data={graphData}>
-              {Object.keys(dateIdMatch).map((element, index) => 
-                <Line type="monotone" dataKey={element} stroke={colorWheel(index, Object.keys(dateIdMatch).length)} />
-              )}
-              <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-              <XAxis dataKey="dateCollected" />
-              <YAxis domain={[min-100, max+100]}/>
-              <Tooltip />
-              <Legend />
-            </LineChart>
-            <table>
-              <tbody>
-                <tr>
-                  <th>Date</th>
-                  {resortPrices.map((element) =>
-                    <th>
-                      Price ({element.startDate} - {element.endDate})
-                    </th>
+          graphData ?
+            <>
+              <LineChart width={400} height={400} data={graphData}>
+                {Object.keys(dateIdMatch).map((element, index) =>
+                  <Line type="monotone" dataKey={element} stroke={colorWheel(index, Object.keys(dateIdMatch).length)} />
+                )}
+                <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                <XAxis dataKey="dateCollected" />
+                <YAxis domain={[min - 100, max + 100]} />
+                <Tooltip />
+                <Legend />
+              </LineChart>
+              <table>
+                <tbody>
+                  <tr>
+                    <th>Date</th>
+                    {resortPrices.map((element) =>
+                      <th>
+                        Price ({element.startDate} - {element.endDate})
+                      </th>
+                    )}
+                  </tr>
+                  {graphData.map((item) =>
+                    <tr>
+                      <td>{item.dateCollected}</td>
+                      {Object.keys(dateIdMatch).map((index) => 
+                        <td>{item[index]}</td>
+                      )}
+                    </tr>
                   )}
-                </tr>
-                {/* {resortPrices.map((item) => 
-              <tr>
-              item.map(() =>
-                  <td>{item.price}</td>
-                  <td>{item.price}</td>
-              </tr>
-              )
-            )} */}
-              </tbody>
-            </table>
-          </>
+                </tbody>
+              </table>
+            </>
+            : null
           : null
         : null
       }
