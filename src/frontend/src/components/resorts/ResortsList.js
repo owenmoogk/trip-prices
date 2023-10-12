@@ -4,7 +4,7 @@ import doPost from "../PostRequest"
 import { getCookie } from "../CSRF"
 import doGet from "../GetRequest"
 
-export default function ResortsList(){
+export default function ResortsList(props){
 
   const [resortData, setResortData] = useState()
 
@@ -33,8 +33,12 @@ export default function ResortsList(){
           <h3>Favorite Resorts</h3>
           <ResortTable resortData={resortData.filter((x) => x.liked)} favoriteResort={favoriteResort} />
           
-          <h3>Other Resorts</h3>
-          <ResortTable resortData={resortData.filter((x) => !x.liked)} favoriteResort={favoriteResort} />
+          {props.onlyFavorites ? null : 
+            <>
+              <h3>Other Resorts</h3>
+              <ResortTable resortData={resortData.filter((x) => !x.liked)} favoriteResort={favoriteResort} />
+            </>
+          }
         </>
         
       : null}

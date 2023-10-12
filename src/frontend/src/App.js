@@ -75,7 +75,10 @@ export default function App(props) {
 					</Route>
 					<Route exact path=''>
 						{loggedIn
-							? <FavoritePage />
+							? <>
+								<FavoritePage />
+								<ResortsList onlyFavorites={true} />
+								</>
 							: <WelcomePage />
 						}
 					</Route>
