@@ -7,7 +7,6 @@ from django.contrib.auth.models import User
 
 @api_view(['GET'])
 def current_user(request):
-    print(request.user)
     return Response({'username': request.user.username})
 
 
