@@ -1,9 +1,8 @@
 import sqlite3
 from bs4 import BeautifulSoup
 from selenium import webdriver
-import csv
-from datetime import date
-import time
+from datetime import date, datetime
+import re
 from random import randint
 
 # connect to the database
@@ -30,10 +29,18 @@ def addResortName(name):
   conn.commit()
   updateResortNames()
 
-def addPrice(resortId, price):
+def addPrice(resortId, price, tripStartDate, tripEndDate):
   while True:
     try:
-      cursor.execute(f"insert into api_pricedatapoint values({randint(0,100000000)}, {price}, \'{date.today().year}-{date.today().month}-{date.today().day}\', {resortId})")
+      cursor.execute(f"""
+                     insert into api_pricedatapoint (id, price, dateCollected, resort_id, tripStartDate, tripEndDate) values(
+                        {randint(0,100000000)}, 
+                        {price}, 
+                        \'{date.today().year}-{date.today().month}-{date.today().day}\', 
+                        {resortId},
+                        \'{tripStartDate.year}-{tripStartDate.month}-{tripStartDate.day}\',
+                        \'{tripEndDate.year}-{tripEndDate.month}-{tripEndDate.day}\'
+                    )""")
       conn.commit()
       return
     except:
@@ -57,55 +64,30 @@ soup = BeautifulSoup(html, 'html.parser')
 # find all of the elements
 rows = soup.find(id="resultstbody").findAll(class_ = "linkRow")
 
-# only match these resorts
-# resortMatchNames = [
-#   "Barcelo Maya Palace",
-#   "Hilton Tulum",
-#   "Margaritaville",
-#   "Royal Hideaway",
-#   "Secrets",
-#   "Sensira"
-# ]
-
 for row in rows:
-  name = row.find("th").text.replace("'", "")
-  price = row.find(class_= "four").text
+  name = re.sub(r'\([^)]*\)', '', row.find("th").text.replace("'", "")).strip()
+  price4 = row.find(class_= "four").text
+  price5 = row.find(class_= "five").text
+  price6 = row.find(class_= "six").text
   
   if name not in resortNames:
     addResortName(name)
   
   resortId = resortIds[resortNames.index(name)]
   try:
-    float(price)
-    addPrice(resortId, price)
+    float(price4)
+    addPrice(resortId, price4, datetime.strptime("17-Jan-23", "%d-%b-%y"), datetime.strptime("24-Jan-23", "%d-%b-%y"))
   except:
     pass
 
+  try:
+    float(price5)
+    addPrice(resortId, price5, datetime.strptime("24-Jan-23", "%d-%b-%y"), datetime.strptime("31-Jan-23", "%d-%b-%y"))
+  except:
+    pass
 
-# with open("master.csv", "a", newline="") as f:
-#   appendArr = [str(date.today().year)+"/"+str(date.today().month)+"/"+str(date.today().day)]
-  
-#   for row in appendRows:
-#     appendArr.append(row.find(class_= "four").text)
-#     appendArr.append(row.find(class_= "five").text)
-#     appendArr.append(row.find(class_= "six").text)
-  
-#   writer = csv.writer(f)
-#   # writer.writerow(appendNames)
-#   writer.writerow(appendArr)
-
-
-
-# time.sleep(5)
-
-
-# sql_query = """SELECT name FROM sqlite_master WHERE type='table';"""
- 
-# # Creating cursor object using connection object
-  
-# # executing our sql query
-# cursor.execute(sql_query)
-# print("List of tables\n")
-  
-# # printing all tables list
-# print(cursor.fetchall())
+  try:
+    float(price6)
+    addPrice(resortId, price6, datetime.strptime("31-Jan-23", "%d-%b-%y"), datetime.strptime("07-Feb-23", "%d-%b-%y"))
+  except:
+    pass
