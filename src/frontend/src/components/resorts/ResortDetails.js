@@ -4,6 +4,7 @@ import React from "react";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 import colorWheel from "../ColorWheel"
+import smoothGraphingData from "../smoothGraphingData";
 
 export default function ResortDetails() {
 
@@ -51,7 +52,7 @@ export default function ResortDetails() {
           tmpGraphData.push(dateData[key])
         }
         tmpGraphData.sort((a, b) => new Date(a["dateCollected"]) - new Date(b["dateCollected"]))
-
+        tmpGraphData = smoothGraphingData(tmpGraphData)
         setGraphData(tmpGraphData)
       })
   }

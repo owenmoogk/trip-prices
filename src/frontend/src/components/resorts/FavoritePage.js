@@ -1,7 +1,6 @@
 import { useEffect, useState, useTransition } from "react"
 import React from "react"
-import doPost from "../PostRequest"
-import { getCookie } from "../CSRF"
+import smoothGraphingData from "../smoothGraphingData";
 import doGet from "../GetRequest"
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend} from 'recharts';
 import colorWheel from "../ColorWheel"
@@ -39,6 +38,7 @@ export default function FavoritePage(){
 
       tmpGraphData.sort((a,b) => new Date(a["dateCollected"]) - new Date(b["dateCollected"]))
 
+      tmpGraphData = smoothGraphingData(tmpGraphData)
       setGraphData(tmpGraphData)
 
       setResortNames(Object.keys(data))
