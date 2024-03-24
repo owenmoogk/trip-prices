@@ -1,1 +1,1 @@
-../DONTREADME.md
+../cmod-readme.md
