@@ -56,7 +56,7 @@ browser = webdriver.Edge(
 )
 
 # scrape the website
-url = "https://www.tripcentral.ca/vacationgrid/index.php?params=0,143,19942,0,2,1,2,202401,0,11101,0,0,0,0,2,1,0,0-0-0,0,0,100,0,0,0,0,0,0,0,1,1,0,0&numberOfAdults=2&numberOfRooms=1"
+url = "https://www.tripcentral.ca/vacationgrid/index.php?params=0,143,19942,0,2,1,2,202501,0,11101,0,0,0,0,2,1,0,0-0-0,0,0,100,0,0,0,0,0,0,0,1,1,0,0&numberOfAdults=2&numberOfRooms=1"
 browser.get(url)
 html = browser.page_source
 soup = BeautifulSoup(html, 'html.parser')
@@ -76,18 +76,18 @@ for row in rows:
   resortId = resortIds[resortNames.index(name)]
   try:
     float(price4)
-    addPrice(resortId, price4, datetime.strptime("17-Jan-23", "%d-%b-%y"), datetime.strptime("24-Jan-23", "%d-%b-%y"))
+    addPrice(resortId, price4, datetime.strptime("15-Jan-25", "%d-%b-%y"), datetime.strptime("22-Jan-25", "%d-%b-%y"))
   except:
     pass
 
   try:
     float(price5)
-    addPrice(resortId, price5, datetime.strptime("24-Jan-23", "%d-%b-%y"), datetime.strptime("31-Jan-23", "%d-%b-%y"))
+    addPrice(resortId, price5, datetime.strptime("22-Jan-25", "%d-%b-%y"), datetime.strptime("29-Jan-25", "%d-%b-%y"))
   except:
     pass
 
   try:
     float(price6)
-    addPrice(resortId, price6, datetime.strptime("31-Jan-23", "%d-%b-%y"), datetime.strptime("07-Feb-23", "%d-%b-%y"))
+    addPrice(resortId, price6, datetime.strptime("29-Jan-25", "%d-%b-%y"), datetime.strptime("05-Feb-25", "%d-%b-%y"))
   except:
     pass
